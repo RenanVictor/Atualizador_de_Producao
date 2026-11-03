@@ -1,5 +1,6 @@
 import os
 import Conexao
+import gerenciamento_sql as gtsql
 
 class usuario:
     def __init__(self,dict_banco,dict_valores):
@@ -10,8 +11,9 @@ class usuario:
         from datetime import date
         data_log = date.today()
         usuario = os.getlogin()
+        sql = gtsql.gerador_sql(self.banco)
         lista_select = Conexao.atualiza_banco('select',self.banco,str(self.valores['item']))
-        list_valores = [self.banco['banco'] ,self.valores['item'],data_log,usuario,lista_select['count_row'],lista_select['sql_gerado']]
+        list_valores = [self.banco['banco'] ,self.valores['item'],data_log,usuario,lista_select['count_row'],sql.retorna_sql_update()]
         print(list_valores)
         return list_valores
 

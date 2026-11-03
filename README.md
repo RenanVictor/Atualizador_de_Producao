@@ -1,98 +1,142 @@
-# Gerador de SQL
+# Atualizador de Produção
 
-Este é um projeto simples para aprendizado pessoal.
+**Atualizações operacionais simples, rastreáveis e acessíveis para o processo produtivo.**
 
-## **Objetivo:**
+Aplicação desktop em Python para atualizar registros de produção por meio de uma interface gráfica, sem exigir que o usuário conheça SQL ou Python.
 
-### Este programa deve auxiliar na finalização das máquinas no processo produtivo de uma empresa
+![Status do projeto](https://img.shields.io/badge/status-em%20evolu%C3%A7%C3%A3o-orange)
+![Tecnologia](https://img.shields.io/badge/linguagem-Python-blue)
+![Banco de dados](https://img.shields.io/badge/banco-PostgreSQL-4169E1)
 
-### Ele fará conexão direta com o banco, atualizando de forma simples e dinâmica a ferramenta **METABASE**, uma ferramenta BI
+---
 
-### O intuíto é que qualquer que tenha permissão atualize as máquinas prontas sem ter a necessidade de conhecer programação (SQL ou Python)
+## Sumário
 
-## **Status**
+1. [Visão geral](#visão-geral)
+2. [Objetivos](#objetivos)
+3. [Funcionalidades](#funcionalidades)
+4. [Tecnologias e integrações](#tecnologias-e-integrações)
+5. [Fluxo de operação](#fluxo-de-operação)
+6. [Pendências prioritárias](#pendências-prioritárias)
+7. [Próximas melhorias](#próximas-melhorias)
+8. [Segurança e confiabilidade](#segurança-e-confiabilidade)
+9. [Histórico de alterações](CHANGELOG.md)
 
-### Projeto em fase inicial, com apenas alguns simples recursos de sql
+## Visão geral
 
-## 1. Versão Inicial
+O **Atualizador de Produção** simplifica a atualização de informações relacionadas à finalização de máquinas e itens do processo produtivo.
 
-* O programa já tem uma janela de finalizar itens.
-* Opção para os dois bancos (pedidos e laser).
-* Mostra os itens finalizados enquanto o programa está rodando.
-* Comunicação direta com o banco de dados (Arquivo **Conexao.py**)
+A ferramenta permite que usuários autorizados realizem operações por uma interface gráfica. O objetivo é reduzir a necessidade de alterações manuais no banco de dados e contribuir para a consistência das informações utilizadas em relatórios e painéis do **Metabase**.
 
-## 2. Versão Inicial para usuário (*Finalizado - 2022-02-04*)
+## Objetivos
 
-* [X] Botão para cancelar itens finalizados (*Finalizado 2022-01-25*)
-* [X] Banco Laser terá a opção de máquina (*Finalizado 2022-01-26*).
-* [X] Mensagem de finalizado com sucesso.
-* [X] Mensagem item não encontrado.
-* [X] Finalizar apenas itens na montagem (Banco Pedidos).
-* [X] Ajustas os testes do botão cancelar e implementas as funções requeridas para validações.
-* [X] Corrigir o bug que pode enviar máquina em branco para o banco laser
+- Simplificar a finalização e o cancelamento de itens.
+- Permitir alterações de estado conforme as opções disponíveis no banco selecionado.
+- Registrar complementos e previsões associados aos itens.
+- Manter um histórico das operações realizadas pelos usuários.
+- Apoiar a consistência dos dados consumidos pelo Metabase.
+- Facilitar a manutenção e a evolução da aplicação.
 
-## 3. Versão fase BETA para teste com usuários (*Finalizado 2022-02-17*)
+## Funcionalidades
 
-* [X] Conseguir ler o usuário que está usando o programa **log_usuario.py**
-* [X] Criar tabela para armazenar os logs de finalização por usuário **tabela postgre log_usuario**
-* [X] Desenvolver executável para o programa (*<https://datatofish.com/executable-pyinstaller/>*)
-* [X] Corrigir problema de quando encontrar mais de uma chave para a ordem informada (*Correção não testada*)
-* [X] Armazenar todos os registros enviados para finalizar itens para a tabela *log_usuario*
-* [X] Gerar o insert através da lista de registros
+### 1. Aba Finalizar
 
-### 3.1 melhorias e atualizações
+| Ação | Comportamento |
+| --- | --- |
+| **Finalizar** | Atualiza o status e a data de término do item. |
+| **Cancelar** | Reverte o status e remove a informação de término. |
+| **Complemento** | Permite informar dados adicionais relacionados ao item. |
 
-* O campo do combobox_banco passa de Laser para plan_laser (nome íntegro da tabela)
+### 2. Aba Estado
 
-## 4. Lançamento para usuário final com acomnpanhamentos (*Aguardando*)
+Permite alterar o estado de um registro usando os estados disponíveis no banco selecionado.
 
-* [X] Adicionado o recurso de finalizar itens componentes no programa **2023-07-14**.
-* [X] Trazer os histórico de registros por usuário sempre que abrir o programa (últimos 5 registros) **2023-07-17**
-* [X] Melhorar o código para as futuras implementações de novos recursos
-* [ ] Melhorar a visualização do histórico de registros do usuário.
-* [X] Incluir as GUI nas abas para escolher as opções. **2023-07-18**
+- Carrega os estados disponíveis de acordo com a seleção.
+- Permite escolher o novo estado pela interface.
+- Envia a atualização ao banco de dados.
 
-### 4.1 melhorias e atualizações
+### 3. Aba Comentários
 
-* Atualizar o executável.
-* Testar a função de cancelar item Finalizado.
+Permite atualizar os campos de complemento e previsão associados ao registro.
 
-## 5. Criar a interface para alterar o estado dos itens de acordo com o banco escolhido
+> **Atenção:** a disponibilidade depende das colunas existentes na tabela selecionada. A validação de compatibilidade entre bancos e colunas ainda está pendente.
 
-* [X] criar a janela com o designe e opções de alteração de estado. **2023-07-19**
-* [X] o Combobox terá que buscar todos os estados encontrado no banco de acordo com o banco escolhido.**2023-07-19**
-* [X] Desenvolver o lançamento no banco para alteração do estado do item. **2023-07-21**
+### 4. Histórico de operações
 
-## 6. Adicionar algumas funções novas
+A aplicação possui recursos para identificar o usuário e registrar operações de finalização em uma tabela de log no PostgreSQL. Também pode exibir os cinco registros mais recentes do usuário ao iniciar.
 
-* [X] Adicionar o campo de complemento na aba finalizar. **2026-10-27**
-* [X] Criar aba para adicionar complementos/previsao. **2026-10-28**
-* [X] Acertar envio de previsao como data para a tabela pedidos. **2026-10-29**
-* [] **Aba Comentários** - Verificar os bancos com as colunas disponíveis, ou permitir apenas o pedidos.
-* [] Resolver erro do insert no banco de dados log, está enviando o select ao invés de enviar o update realizado.
+> **Pendente:** corrigir o registro do comando na tabela de log, para que seja armazenada a operação efetivamente executada, e não apenas o comando de consulta.
 
-## 7. Implementações futuras
+## Tecnologias e integrações
 
-* [ ] Criar uma consulta dos itens por tipo e estado.
-* [ ] Limitar estados e criar tratamento de erro.
-* [ ] utilizar o método de validação de uma forma mais abrangente, redefinir a função.
+| Tecnologia ou componente | Responsabilidade |
+| --- | --- |
+| **Python** | Linguagem principal da aplicação. |
+| **Interface gráfica (GUI)** | Interação por janelas, abas e campos de seleção. |
+| **PostgreSQL** | Banco de dados utilizado pela aplicação. |
+| `Conexao.py` | Comunicação com o banco de dados. |
+| `log_usuario.py` | Identificação do usuário. |
+| **PyInstaller** | Geração do executável. |
+| **Metabase** | Consumo e visualização dos dados do processo produtivo. |
 
-## **Testes**
+A aplicação contempla operações relacionadas aos bancos **Pedidos** e **Laser**, incluindo a tabela `plan_laser`. As operações disponíveis dependem da tabela selecionada e das colunas existentes.
 
-* ### **2022-01-25** - Consertado e testado a geração de atualização dos itens para o banco de dados *Laser*
+## Fluxo de operação
 
-* ### **2022-01-27** - Realizado mais testes e corrigidos alguns erros de validação
+O diagrama abaixo representa o fluxo esperado em alto nível. A implementação real deve ser conferida no código-fonte.
 
-* ### **2022-02-01** - Testado as funções implementadas para a versão inicial 2.0 para o banco pedidos, Montado o fluxograma da função Finalizar
+```mermaid
+flowchart TD
+    A["Usuário autorizado"] --> B["Seleciona banco e item"]
+    B --> C["Escolhe a operação"]
+    C --> D{"Dados válidos?"}
+    D -- "Não" --> E["Exibir mensagem e interromper"]
+    D -- "Sim" --> F["Executar atualização no banco"]
+    F --> G["Registrar o resultado no log"]
+    G --> H["Informar o resultado ao usuário"]
+    H --> I["Dados disponíveis para consulta no Metabase"]
+```
 
-* ### **2022-02-02** - Testado as funções implementadas para a versão inicial 2.0 para o banco plan_laser
+## Pendências prioritárias
 
-* ### **2022-02-03** - Acertado e testado funcionalizadde do botão cancelar para o banco *pedidos*
+As prioridades abaixo são sugestões para organizar a próxima etapa.
 
-* ### **2026-10-27** - Acertado o método *validacao_update* no arquivo *conexao.py*
+| Prioridade | Tarefa | Situação |
+| --- | --- | --- |
+| Alta | Corrigir o log para registrar a operação executada e seu resultado real. | Concluída |
+| Alta | Validar bancos e colunas disponíveis na aba Comentários. | Pendente |
+| Média | Testar o cancelamento de itens finalizados. | Pendente |
+| Média | Atualizar e validar o executável. | Pendente |
+| Média | Melhorar a visualização do histórico do usuário. | Pendente |
 
-   ``` python
-      Saiu:       valores.append(list(dic_valores.values())[i])
-      adicionou:  valores.append(dic_valores[registro['col_change'][i]])
-   ```
+## Próximas melhorias
 
+- [ ] Criar consultas de itens por tipo e estado.
+- [ ] Restringir os estados conforme as regras de negócio.
+- [ ] Ampliar e padronizar as validações.
+- [ ] Melhorar o tratamento de erros de conexão e atualização.
+- [ ] Aprimorar a auditoria das operações.
+- [ ] Revisar a experiência de uso da interface.
+
+## Segurança e confiabilidade
+
+Como a aplicação altera dados diretamente no banco, recomenda-se:
+
+- Validar os dados antes de executar atualizações.
+- Utilizar consultas parametrizadas sempre que possível.
+- Restringir as permissões do usuário de banco às operações necessárias.
+- Registrar usuário, data/hora, item, operação e resultado.
+- Não registrar uma operação como concluída quando a atualização falhar.
+- Testar novas versões em ambiente controlado antes da distribuição.
+- Nunca armazenar senhas ou credenciais diretamente neste arquivo.
+
+## Arquivos de documentação
+
+- [`README.md`](README.md) — visão geral, funcionalidades, tecnologias e pendências.
+- [`CHANGELOG.md`](CHANGELOG.md) — histórico de desenvolvimento, alterações e testes.
+
+## Situação atual
+
+O projeto evoluiu de uma ferramenta simples de finalização para uma aplicação com recursos de alteração de estado, complementos, previsões e registro de operações.
+
+**Foco atual:** consolidar as validações da aba Comentários, corrigir a gravação dos logs e concluir os testes das funcionalidades existentes antes de ampliar o escopo.

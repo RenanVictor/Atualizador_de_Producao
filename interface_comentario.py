@@ -43,35 +43,35 @@ def interface_comentario(root, mainRoot):
         
 
 #Recursos Janela
-    mainRoot.title('Incluir valor')
-    tblFrame = tk.Frame(root, relief='groove', borderwidth=2)
-    tblBotoes = tk.Frame(root)
-    lblTabela = tk.Label(tblFrame, text='Selecione a Tabela:')
-    lblColuna = tk.Label(tblFrame, text='Selecione a coluna:')
-    lbl_item = tk.Label(tblFrame, text='Informar a OP ou ID:')
-    lbl_campo_selecionado = tk.Label(tblFrame,text='Valor atual:')
-    lbl_info = tk.Label(tblFrame,text="Para datas, utilizar o formato DD-MM-YYYY")
-    cbx_banco = ttk.Combobox(tblFrame, width=17, values=tabelas(bancos.dict_tabelas()))
-    cbx_coluna = ttk.Combobox(tblFrame, width=17, values=['Previsao','Complemento'])
-    txt_item = tk.Entry(tblFrame)
-    txt_valor = tk.Entry(tblFrame)
+    root.columnconfigure(0, weight=1)
+    lblTitulo = ttk.Label(root, text='Adicionar ou atualizar uma informação', style='Section.TLabel')
+    tblFrame = ttk.Frame(root, style='Card.TFrame', padding=22)
+    tblBotoes = ttk.Frame(root)
+    lblTabela = ttk.Label(tblFrame, text='Banco / tabela', style='Card.TLabel')
+    lblColuna = ttk.Label(tblFrame, text='Campo para atualizar', style='Card.TLabel')
+    lbl_item = ttk.Label(tblFrame, text='Número da OP ou ID', style='Card.TLabel')
+    lbl_campo_selecionado = ttk.Label(tblFrame,text='Novo valor', style='Card.TLabel')
+    lbl_info = ttk.Label(tblFrame,text="Para datas, use o formato DD-MM-AAAA", style='Card.TLabel')
+    cbx_banco = ttk.Combobox(tblFrame, width=30, values=tabelas(bancos.dict_tabelas()), state='readonly')
+    cbx_coluna = ttk.Combobox(tblFrame, width=30, values=['Previsao','Complemento'], state='readonly')
+    txt_item = ttk.Entry(tblFrame, width=32)
+    txt_valor = ttk.Entry(tblFrame, width=32)
 
-    btnEstado = tk.Button(tblBotoes, text='Alterar', command=update_alterar)
+    btnEstado = ttk.Button(tblBotoes, text='Salvar alteração', command=update_alterar)
     
 #Layout da Janela
-    tblFrame.grid(row=1, column=0)
-    lblTabela.grid(row=0, column=0, sticky='w', pady=5, padx=5)
-    cbx_banco.grid(row=0, column=1, sticky='w', padx=5)
-    lblColuna.grid(row=1, column=0, sticky='w',pady=5, padx=5)
-    cbx_coluna.grid(row=1, column=1, sticky='w', padx=5)
-    lbl_item.grid(row=2, column=0, sticky='w',pady=5, padx=5)
-    txt_item.grid(row=2, column=1, sticky='w', padx=5)
-    
-    tblBotoes.grid(row=2, column=0)
-    btnEstado.grid(row=0, column=0, sticky='w',pady=10, padx=5)
+    lblTitulo.grid(row=0, column=0, sticky='w', pady=(0, 12))
+    tblFrame.grid(row=1, column=0, sticky='ew')
+    tblFrame.columnconfigure(1, weight=1)
+    for r, (label, widget) in enumerate(((lblTabela, cbx_banco), (lblColuna, cbx_coluna), (lbl_item, txt_item))):
+        label.grid(row=r, column=0, sticky='w', padx=(0, 18), pady=10)
+        widget.grid(row=r, column=1, sticky='ew', pady=10)
+    tblBotoes.grid(row=2, column=0, sticky='w', pady=14)
+    btnEstado.grid(row=0, column=0)
+    lbl_info.grid(row=3, column=0, columnspan=2, sticky='w', pady=(0, 5))
 
     cbx_coluna.bind("<<ComboboxSelected>>",coluna_selecionada)
-
+'''
 janela = tk.Tk()
 interface_comentario(janela,janela)
-janela.mainloop()
+janela.mainloop()'''

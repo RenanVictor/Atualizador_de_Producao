@@ -31,27 +31,27 @@ def interface_estado(root, mainRoot):
         
 
 #Recursos Janela
-    mainRoot.title('Alterar Estado')
-    tblFrame = tk.Frame(root, relief='groove', borderwidth=2)
-    tblBotoes = tk.Frame(root)
-    lblTabela = tk.Label(tblFrame, text='Selecione a Tabela:')
-    lblEstado = tk.Label(tblFrame, text='Slecione o Estado:')
-    lblinfo = tk.Label(tblFrame, text='Favor informar o ID:')
-    cbx_banco = ttk.Combobox(tblFrame, width=17, values=tabelas(bancos.dict_tabelas()))
-    cbx_estado = ttk.Combobox(tblFrame, width=17, values='')
-    txtInfo = tk.Entry(tblFrame)
-    btnEstado = tk.Button(tblBotoes, text='Alterar', command=update_alterar)
+    root.columnconfigure(0, weight=1)
+    lblTitulo = ttk.Label(root, text='Alterar estado de produção', style='Section.TLabel')
+    tblFrame = ttk.Frame(root, style='Card.TFrame', padding=22)
+    tblBotoes = ttk.Frame(root)
+    lblTabela = ttk.Label(tblFrame, text='Banco / tabela', style='Card.TLabel')
+    lblEstado = ttk.Label(tblFrame, text='Novo estado', style='Card.TLabel')
+    lblinfo = ttk.Label(tblFrame, text='Número da OP ou ID', style='Card.TLabel')
+    cbx_banco = ttk.Combobox(tblFrame, width=30, values=tabelas(bancos.dict_tabelas()), state='readonly')
+    cbx_estado = ttk.Combobox(tblFrame, width=30, state='readonly')
+    txtInfo = ttk.Entry(tblFrame, width=32)
+    btnEstado = ttk.Button(tblBotoes, text='Aplicar alteração', command=update_alterar)
     
 #Layout da Janela
-    tblFrame.grid(row=1, column=0)
-    lblTabela.grid(row=0, column=0, sticky='w', pady=5, padx=5)
-    cbx_banco.grid(row=0, column=1, sticky='w', padx=5)
-    lblEstado.grid(row=1, column=0, sticky='w',pady=5, padx=5)
-    cbx_estado.grid(row=1, column=1, sticky='w', padx=5)
-    lblinfo.grid(row=2, column=0, sticky='w',pady=5, padx=5)
-    txtInfo.grid(row=2, column=1, sticky='w', padx=5)
-    tblBotoes.grid(row=2, column=0)
-    btnEstado.grid(row=0, column=0, sticky='w',pady=10, padx=5)
+    lblTitulo.grid(row=0, column=0, sticky='w', pady=(0, 12))
+    tblFrame.grid(row=1, column=0, sticky='ew')
+    tblFrame.columnconfigure(1, weight=1)
+    for r, (label, widget) in enumerate(((lblTabela, cbx_banco), (lblEstado, cbx_estado), (lblinfo, txtInfo))):
+        label.grid(row=r, column=0, sticky='w', padx=(0, 18), pady=10)
+        widget.grid(row=r, column=1, sticky='ew', pady=10)
+    tblBotoes.grid(row=2, column=0, sticky='w', pady=14)
+    btnEstado.grid(row=0, column=0)
 
     cbx_banco.bind("<<ComboboxSelected>>",estados_cbx)
 
